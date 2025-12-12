@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Encontra tu anime</title>
+  <style>
+    :root{--bg:#0b0b0b;--card:#121212;--accent:#e60023}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#050505, #0f0f12);color:#fff}
+    .container{max-width:720px;margin:28px auto;padding:18px}
+    header{display:flex;align-items:center;gap:12px}
+    h1{margin:0;font-size:20px}
+    .card{background:var(--card);border-radius:12px;padding:14px;margin-top:16px;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+    label{display:block;margin-top:10px;font-size:13px;color:#cfcfcf}
+    select,button{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:0;font-size:15px}
+    button{background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .result{margin-top:14px;padding:12px;border-radius:8px;background:#0d0d0d;min-height:48px;display:flex;align-items:center}
+    footer{margin-top:18px;font-size:13px;color:#999;text-align:center}
+    @media(min-width:640px){h1{font-size:24px} .container{padding:28px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="" alt="" style="width:46px;height:46px;border-radius:8px;background:#111"/>
+      <div>
+        <h1>Encontra tu anime</h1>
+        <div style="font-size:13px;color:#bdbdbd">Elegí filtros y encontrá un anime al toque</div>
+      </div>
+    </header>
+
+    <div class="card" role="region" aria-label="Buscador de animes">
+      <label for="idioma">Idioma</label>
+      <select id="idioma" aria-label="Idioma">
+        <option value="latino">Latino</option>
+        <option value="japones">Japonés</option>
+      </select>
+
+      <label for="genero1">Género 1</label>
+      <select id="genero1" aria-label="Género principal">
+        <option value="accion">Acción</option>
+        <option value="comedia">Comedia</option>
+        <option value="terror">Terror</option>
+        <option value="fantasia">Fantasía</option>
+        <option value="drama">Drama</option>
+      </select>
+
+      <label for="genero2">Género 2 (opcional)</label>
+      <select id="genero2" aria-label="Género secundario">
+        <option value="">(ninguno)</option>
+        <option value="comedia">Comedia</option>
+        <option value="accion">Acción</option>
+        <option value="drama">Drama</option>
+        <option value="fantasia">Fantasía</option>
+        <option value="terror">Terror</option>
+      </select>
+
+      <button id="buscar">Buscar anime</button>
+
+      <div id="resultado" class="result" style="display:none"></div>
+    </div>
+
+    <footer>Hecho por Benja &nbsp;·&nbsp; Prototipo simple</footer>
+  </div>
+
+  <script>
+    const animes = [
+      { nombre: "One Punch Man", idioma: "latino", generos: ["accion","comedia"], sinopsis: "Un héroe aburrido busca emoción." },
+      { nombre: "Mob Psycho 100", idioma: "latino", generos: ["accion","comedia"], sinopsis: "Un psíquico que intenta vivir tranquilo." },
+      { nombre: "Jujutsu Kaisen", idioma: "latino", generos: ["accion","fantasia"], sinopsis: "Luchas sobrenaturales con estilo." },
+      { nombre: "Zom 100", idioma: "latino", generos: ["comedia","terror"], sinopsis: "Un apocalipsis zombie con humor." },
+      { nombre: "Gleipnir", idioma: "latino", generos: ["accion","misterio"], sinopsis: "Peleas y secretos extraños." },
+      { nombre: "Haikyuu!!", idioma: "latino", generos: ["deporte","comedia"], sinopsis: "Vóley y corazón." }
+    ];
+
+    function buscar() {
+      const idioma = document.getElementById("idioma").value;
+      const g1 = document.getElementById("genero1").value;
+      const g2 = document.getElementById("genero2").value;
+
+      const filtrados = animes.filter(a => a.idioma === idioma && a.generos.includes(g1) && (g2 === "" ? true : a.generos.includes(g2)));
+
+      const resultadoEl = document.getElementById("resultado");
+      if (filtrados.length === 0) {
+        resultadoEl.style.display = "flex";
+        resultadoEl.innerHTML = "No hay animes que cumplan exactamente esos filtros.";
+        return;
+      }
+      const elegido = filtrados[Math.floor(Math.random()*filtrados.length)];
+      resultadoEl.style.display = "flex";
+      resultadoEl.innerHTML = `
+        <div style="flex:1">
+          <strong style="font-size:16px">${elegido.nombre}</strong><br>
+          <small style="color:#bfbfbf">${elegido.sinopsis}</small>
+        </div>
+      `;
+    }
+
+    document.getElementById("buscar").addEventListener("click", buscar);
+  </script>
+</body>
+</html>
